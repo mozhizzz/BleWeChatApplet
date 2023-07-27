@@ -1,0 +1,15 @@
+<!--pages/Ble-list/ble_list.wxml-->
+<view>
+  <view>
+    名称过滤 
+  </view>
+  <view>
+    Rssi过滤 
+  </view>
+  <view>
+    启动扫描
+  </view>
+  <view>
+    设备列表
+  </view>
+</view>
