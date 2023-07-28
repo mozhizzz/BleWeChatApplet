@@ -1,2 +1,4 @@
 <!--pages/Ble-slave/ble_slave.wxml-->
-<text>pages/Ble-slave/ble_slave.wxml</text>
+<view>{{deviceInfo.deviceId}}</view>
+<view>{{deviceInfo.deviceName}}</view>
+<view>{{deviceInfo.deviceService}}</view>

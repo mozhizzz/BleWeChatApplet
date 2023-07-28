@@ -26,7 +26,7 @@ Page({
             // 5秒后停止扫描
             setTimeout(() => {
               wx.stopBluetoothDevicesDiscovery() 
-            }, 3000)
+            }, 5000)
 
             this.onDeviceFound()
           },
@@ -62,11 +62,13 @@ Page({
 
     // 名称过滤
     if (device.localName.indexOf(this.data.filter_name) == -1) {
+      //console.log(`${device.localName} is invaild`)
       return
     }
 
     // rssi过滤
     if (device.rssi < this.data.filter_rssi) {
+      //console.log(`${device.rssi} is too low`)
       return
     }
     
@@ -78,6 +80,11 @@ Page({
     }
 
     this.data.ble_list.push(device)
+    
+    console.log(`${device.localName} is vaild`)
+    wx.navigateTo({
+      url: `/pages/Ble-slave/ble_slave?deviceId=${device.deviceId}&&deviceName=${device.localName}`
+    })
   },
 
   /**
@@ -95,6 +102,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    // 清空列表
+    this.data.ble_list = []
+
+    // 开始扫描
     this.startScan()
   },
 

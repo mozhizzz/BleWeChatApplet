@@ -5,20 +5,25 @@ Page({
    * 页面的初始数据
    */
   data: {
-    deviceID: null,
+    deviceInfo: {
+      deviceId: '',
+      deviceName: '',
+      deviceService: []
+    },
+    negotiation_mtu: 200,
   },
 
   /**
    * 自定义函数--发起蓝牙连接
    */
-  initBleConnect(deviceId) {
+  initBleConnect(deviceInfo) {
+    console.log(`start connection with ${deviceInfo.deviceName}`)
     wx.createBLEConnection({
-      // connectionPriority: high,
-      deviceId: deviceId,
+      deviceId: deviceInfo.deviceId,
       success: (res) => {
         console.log('success', res)
-        // this.getBLEDeviceServices(deviceId)
         
+        // 手机操作系统判断，非IOS要进行MTU协商
         try {
           const systemInfo = wx.getSystemInfoSync();
           if (systemInfo.platform === 'ios') {
@@ -27,10 +32,9 @@ Page({
             console.log('当前环境不是 iOS');
             try {
               wx.setBLEMTU({
-                deviceId: deviceId,
-                mtu: self.constData.BLE_MTU_SIZE,
+                deviceId: deviceInfo.deviceId,
+                mtu: this.data.negotiation_mtu,
                 fail: (res) => {
-                  self.errMsg(self.data.lang.s2, self.data.lang.s3)
                   console.log('setBLEMTU ERROR: ', res.errCode)
                 }
               })
@@ -41,42 +45,10 @@ Page({
         } catch (err) {
           console.error('获取系统信息失败:', err);
         }
-        console.log('self.data.ble.deviceId: ', self.data.ble.deviceId)
 
-        this.getBLEDeviceServices(deviceId)
+        console.log('Connect successfully, deviceId: ', deviceInfo.deviceId)
 
-        setTimeout(() => {
-          wx.notifyBLECharacteristicValueChange({
-            deviceId: deviceId,
-            serviceId: "6E400001-B5A3-F393-E0A9-E50E24DCCA9E",
-            characteristicId: "6E4000FF-B5A3-F393-E0A9-E50E24DCCA9E",
-            state: true,
-            success: (res) => {
-              console.log('notifyBLECharacteristicValueChange SUCCESS: ', res.errCode)
-              wx.onBLECharacteristicValueChange(self.onBLECharacteristicValueChange)
-              self.getVersion()
-              setTimeout(() => {
-                if (self.data.ble.connected == false) {
-                  this.closeBLEConnection()
-                  wx.showModal({
-                    title: this.data.lang.s5,
-                    content: this.data.lang.s6,
-                    confirmText: this.data.lang.s7,
-                    showCancel: false,
-                    success: (res) => {
-                      wx.hideLoading()
-                    }
-                  })
-                }
-              }, 2000);
-            },
-            fail: (res) => {
-              console.log('notifyBLECharacteristicValueChange ERROR: ', res.errCode)
-              console.log(deviceId)
-              self.errMsg(this.data.lang.s8, this.data.lang.s9)
-            }
-          })
-        }, 1500);
+        this.getAllServiceAndCharacteristic(deviceInfo.deviceId)
       },
       
       fail: (res) => {
@@ -96,10 +68,72 @@ Page({
   },
 
   /**
+   * 自定义函数--使能notification
+   */
+  enableNotification(deviceId) {
+    
+  },
+
+  /**
+   * 自定义函数--往特征写入数据
+   */
+  writeCharacteristic(deviceId, serviceUUID, characteristicUUID) {
+    
+  },
+
+  /**
+   * 自定义函数--接收notification消息
+   */
+  onCharacteristicNotifiedMsg() {
+    
+  },
+
+  /**
+   * 自定义函数--往特征写入数据
+   */
+  getAllServiceAndCharacteristic(deviceId) {
+    console.log('start find service and characteristic')
+
+    wx.getBLEDeviceServices({
+      deviceId: deviceId,
+      success: (res) => {
+        res.services.forEach((serItem) => {
+          console.log('get service successfully, services UUID: ', serItem.uuid)
+          wx.getBLEDeviceCharacteristics({
+            deviceId: deviceId,
+            serviceId: serItem.uuid,
+            success: (res) => {
+              let chars = []
+              res.characteristics.forEach((charItem) => {
+                console.log('get characteristics successfully, characteristics UUID: ', charItem.uuid)
+                chars.push(charItem)
+              })
+
+              this.data.deviceInfo.deviceService.push({
+                serviceUUID: serItem.uuid,
+                characteristics: chars
+              })
+            },
+            fail: (res) => {
+              console.log('get characteristic fail', res)
+            }
+          })
+        })
+      },
+      fail: (res) => {
+        console.log('get serivce fail', res)
+      }
+    })
+  },
+
+  /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.data.deviceInfo.deviceId = options.deviceId
+    this.data.deviceInfo.deviceName = options.deviceName
 
+    this.initBleConnect(this.data.deviceInfo)
   },
 
   /**
