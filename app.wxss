@@ -5,6 +5,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 200rpx 0;
+  padding: 0 0;
   box-sizing: border-box;
-} 
+}
+
+wx-slider .wx-slider-handle-wrapper{
+  height: 30rpx;
+  width: 450rpx;
+  margin-left: 50rpx;
+  background: linear-gradient(to right, #4169E1 0%, #00FFFF 100%);
+}

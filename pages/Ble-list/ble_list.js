@@ -1,15 +1,16 @@
-// pages/Ble-list/ble_list.js
+// pages/Ble-list/bleList.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    ble_list: [],    // 设备列表
-    filter_name: 'MTC', // 过滤条件-名称(名称字符串中包含该字符串)
-    filter_rssi: -100,  // 过滤条件-rssi大于该值的
+    bleList: [],    // 设备列表
+    filterName: 'MTC', // 过滤条件-名称(名称字符串中包含该字符串)
+    filterRssi: -100,  // 过滤条件-rssi大于该值的
   },
 
+//***************************************自定义函数 *****/
   /**
    * 自定义函数--开始蓝牙扫描
    */
@@ -61,29 +62,25 @@ Page({
     }
 
     // 名称过滤
-    if (device.localName.indexOf(this.data.filter_name) == -1) {
-      //console.log(`${device.localName} is invaild`)
+    if (device.localName.indexOf(this.data.filterName) == -1) {
       return
     }
 
     // rssi过滤
-    if (device.rssi < this.data.filter_rssi) {
-      //console.log(`${device.rssi} is too low`)
+    if (device.rssi < this.data.filterRssi) {
       return
     }
     
     // 重复判断
-    for (let i=0; i<this.data.ble_list.length; i++) {
-      if (device.localName == this.data.ble_list[i].localName) {
+    for (let i=0; i<this.data.bleList.length; i++) {
+      if (device.localName == this.data.bleList[i].localName) {
         return
       }
     }
-
-    this.data.ble_list.push(device)
+    this.data.bleList.push(device)
     
-    console.log(`${device.localName} is vaild`)
-    wx.navigateTo({
-      url: `/pages/Ble-slave/ble_slave?deviceId=${device.deviceId}&&deviceName=${device.localName}`
+    this.setData({
+      bleList: this.data.bleList
     })
   },
 
@@ -97,13 +94,23 @@ Page({
       })
     })
   },
+//******************************************************/
+
+//***************************************自定义事件回调 */
+  rssiSliderChange(event) {
+    this.setData({
+      filterRssi: event.detail.value
+    })
+  },
+
+//******************************************************/
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
     // 清空列表
-    this.data.ble_list = []
+    this.data.bleList = []
 
     // 开始扫描
     this.startScan()
@@ -156,5 +163,5 @@ Page({
    */
   onShareAppMessage() {
 
-  }
+  },
 })

@@ -1,15 +1,29 @@
-<!--pages/Ble-list/ble_list.wxml-->
-<view>
-  <view>
-    名称过滤 
+<view class="container">
+  <view class="upper-module">
+    <!-- 上模块内容 -->
+    <view class="input-module">
+      <input class="input-box" placeholder="{{filterName}}" />
+    </view>
+    <view class="slider-module">
+      <view class="slider-label">RSSI</view>
+      <slider class="slider-bar" min="-100" max="50" step="1" value="{{filterRssi}}" bindchanging="rssiSliderChange" />
+      <view class="slider-value">{{filterRssi}}</view>
+    </view>
+    <view class="button-module">
+      <button class="search-button">Scan</button>
+    </view>
   </view>
-  <view>
-    Rssi过滤 
-  </view>
-  <view>
-    启动扫描
-  </view>
-  <view>
-    设备列表
-  </view>
+  <view class="lower-module">
+    <!-- 下模块内容 -->
+    <view class='device-container'>
+      <view class='device-item rounded-corners' wx:for="{{bleList}}">
+        <view class='device-item-top rounded-corners-top'>
+          <text class='device-name-text rounded-corners-top'>{{item.localName}}</text>
+        </view>
+        <view class='device-item-bottom rounded-corners-bottom'>
+          <text class='device-rssi-text rounded-corners-bottom'>{{item.RSSI}}</text>
+        </view>
+      </view>
+    </view>
+</view>
 </view>
