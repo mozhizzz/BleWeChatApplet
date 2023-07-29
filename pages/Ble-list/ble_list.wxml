@@ -1,29 +1,57 @@
-<view class="container">
-  <view class="upper-module">
-    <!-- 上模块内容 -->
-    <view class="input-module">
-      <input class="input-box" placeholder="{{filterName}}" />
-    </view>
-    <view class="slider-module">
-      <view class="slider-label">RSSI</view>
-      <slider class="slider-bar" min="-100" max="50" step="1" value="{{filterRssi}}" bindchanging="rssiSliderChange" />
-      <view class="slider-value">{{filterRssi}}</view>
-    </view>
-    <view class="button-module">
-      <button class="search-button">Scan</button>
-    </view>
-  </view>
-  <view class="lower-module">
-    <!-- 下模块内容 -->
-    <view class='device-container'>
-      <view class='device-item rounded-corners' wx:for="{{bleList}}">
-        <view class='device-item-top rounded-corners-top'>
-          <text class='device-name-text rounded-corners-top'>{{item.localName}}</text>
+<view class="container-direction">
+    <view class="top-bar top-bar-style">
+        <view class="container-direction">
+            <view class="direction-bisection top-bar-child-style">
+                <view class="container-transverse">
+                    <view class="name-filter-label child-centered font-set-1">
+                        <text>Name</text>
+                    </view>
+                    <view class="name-filter-input child-centered">
+                        <input class="name-input-box" placeholder="{{filterName}}" />
+                    </view>
+                </view>
+            </view>
+            <view class="direction-bisection top-bar-child-style">
+                <view class="container-transverse">
+                    <view class="rssi-label child-centered font-set-1">
+                        <text>RSSI</text>
+                    </view>
+                    <view class="rssi-slider child-centered">
+                        <slider class="slider-bar" min="-100" max="50" step="1" value="{{filterRssi}}" bindchanging="rssiSliderChange" />
+                    </view>
+                    <view class="rssi-value child-centered font-set-1">
+                        <text>{{filterRssi}}</text>
+                    </view>
+                </view>
+            </view>
+            <view class="direction-bisection child-centered">
+                <view class="scan-button child-centered" bindtap="onScanStart">
+                    <icon type="search" size="25" color="yellow" />
+                </view>
+            </view>
         </view>
-        <view class='device-item-bottom rounded-corners-bottom'>
-          <text class='device-rssi-text rounded-corners-bottom'>{{item.RSSI}}</text>
-        </view>
-      </view>
     </view>
-</view>
+    <view class="bottom-bar bottom-bar-style">
+        <view class="container-direction">
+            <view class="device-item-container child-centered" wx:for="{{bleList}}">
+                <view class="device-item">
+                    <view class="container-direction block-type-1">
+                        <view class="direction-bisection">
+                            <view class="container-transverse">
+                                <view class="device-item-name child-centered">
+                                    <text>{{item.localName}}</text>
+                                </view>
+                                <view class="device-item-rssi child-centered">
+                                    <text>{{item.RSSI}}</text>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="direction-bisection"></view>
+                        <view class="direction-bisection"></view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    
+    </view>
 </view>

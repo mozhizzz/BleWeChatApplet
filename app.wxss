@@ -15,3 +15,57 @@ wx-slider .wx-slider-handle-wrapper{
   margin-left: 50rpx;
   background: linear-gradient(to right, #4169E1 0%, #00FFFF 100%);
 }
+
+page {
+    height: 100%;
+}
+
+.container-direction {
+    display: flex; 
+    flex-direction: column; 
+    height: 100%; 
+    padding: 0px;
+    margin-bottom: 10px; 
+    width: 100%; 
+    box-sizing: border-box;
+}
+
+.container-transverse {
+    display: flex; 
+    flex-direction: row; 
+    height: 100%; 
+    padding: 0px;
+    margin-bottom: 10px; 
+    width: 100%; 
+    box-sizing: border-box;
+}
+
+.direction-bisection {
+    flex: 1;
+}
+
+.transverse-bisection {
+    flex: 1;
+}
+
+.child-centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.font-set-1 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    color: rgb(0, 162, 255);
+}
+
+.font-set-2 {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: rgb(255, 251, 2);
+}
+
+.block-type-1 {
+    background: linear-gradient(to right, rgb(0, 162, 255), rgb(230, 230, 113));
+}

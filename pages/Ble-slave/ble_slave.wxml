@@ -1,4 +1,5 @@
-<!--pages/Ble-slave/ble_slave.wxml-->
-<view>{{deviceInfo.deviceId}}</view>
-<view>{{deviceInfo.deviceName}}</view>
-<view>{{deviceInfo.deviceService}}</view>
+<view class="container-direction">
+    <view style="background-color: #F1F1F1; flex: 1;"></view>
+    <view style="background-color: #E6E6E6; flex: 1;"></view>
+    <view style="background-color: #F1F1F1; flex: 1;"></view>
+</view>
