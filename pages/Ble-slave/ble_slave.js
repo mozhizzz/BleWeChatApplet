@@ -127,6 +127,29 @@ Page({
   },
 
   /**
+   * 自定义回调--特征选择
+   */
+  characteritiscSelect(event) {
+    wx.showActionSheet({
+        itemList: ['选项1', '选项2', '选项3'],
+        success: function(res) {
+            wx.showActionSheet({
+                itemList: ['选项A', '选项B', '选项C'],
+                success: function(res) {
+                    console.log(res.tapIndex) // 用户点击的选项序号
+                },
+                fail: function(res) {
+                    console.log(res.errMsg)
+                }
+            })
+        },
+        fail: function(res) {
+          console.log(res.errMsg)
+        }
+    })
+  },
+
+  /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {

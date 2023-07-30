@@ -97,13 +97,26 @@ Page({
 //******************************************************/
 
 //***************************************自定义事件回调 */
+  /**
+   * 自定义回调--滑动rssi滑动条回调
+   */
   rssiSliderChange(event) {
     this.setData({
       filterRssi: event.detail.value
     })
   },
 
+  /**
+   * 自定义回调--点击Scan按钮回调
+   */
   onScanStart(event) {
+
+  },
+
+  /**
+   * 自定义回调-选择设备回调
+   */
+  onDeviceSelect(event) {
 
   },
 

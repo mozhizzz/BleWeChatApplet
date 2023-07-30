@@ -1,5 +1,67 @@
 <view class="container-direction">
-    <view style="background-color: #F1F1F1; flex: 1;"></view>
-    <view style="background-color: #E6E6E6; flex: 1;"></view>
-    <view style="background-color: #F1F1F1; flex: 1;"></view>
+    <view class="ble-info-container">
+        <view class="container-direction">
+            <view style="background-color: #F1F1F1; flex: 1;">
+                <view class="container-transverse">
+                    <view class="ble-info-name-container child-centered font-set-1">
+                        <text>MTC33344423DA22</text>
+                    </view>
+                    <view class="ble-info-conntect-state-container child-centered">
+                        <icon type="success" color="rgb(35, 126, 187)" size="35"/>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="ble-log-container">
+        <textarea placeholder="log" class="ble-log-textarea" value="2023-07-30 21:53: log" disabled="{{true}}" maxlength="{{-1}}"/>
+    </view>
+    <view class="ble-service-container">
+           <view class="container-direction">
+                <view class="ble-com-1">
+                    <view class="container-transverse">
+                        <view class="ble-com-1-interval child-centered">
+                            <input auto-focus placeholder="ms" class="ble-com-1-interval-style"/>
+                        </view>
+                        <view class="ble-com-1-timer child-centered">
+                            <checkbox value="{{checkbBoxValue}}" checked="true"/>定时
+                        </view>
+                        <view class="ble-com-1-service-select child-centered">
+                            <view class="ble-com-1-service-select-style child-centered" bindtap="characteritiscSelect">
+                                <text>选择特征</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view class="ble-com-2">
+                    <view class="container-transverse">
+                        <view class="ble-characteritisc-uuid child-centered font-set-1">
+                            <text>FFF0</text>
+                        </view>
+                        <view class="ble-characteritisc-read child-centered">
+                            <view class="button-1 child-centered">
+                                <text>R</text>
+                            </view>
+                        </view>
+                        <view class="ble-characteritisc-notify child-centered">
+                            <view class="button-1 child-centered">
+                                <text>N</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view class="ble-com-3">
+                    <view class="container-transverse">
+                        <view class="ble-com-2-input child-centered">
+                            <input auto-focus placeholder="info to send" class="ble-com-2-input-style"/>
+                        </view>
+                        <view class="ble-com-2-send child-centered">
+                            <view class="ble-com-2-send-style child-centered">
+                                <text>发送</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+           </view>
+    </view>
 </view>

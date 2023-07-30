@@ -16,6 +16,7 @@ wx-slider .wx-slider-handle-wrapper{
   background: linear-gradient(to right, #4169E1 0%, #00FFFF 100%);
 }
 
+/**************************自定义全局样式********/
 page {
     height: 100%;
 }
@@ -40,6 +41,12 @@ page {
     box-sizing: border-box;
 }
 
+checkbox .wx-checkbox-input{
+    border-radius: 50%;/* 圆角 */
+    width: 46rpx; /* 背景的宽 */
+    height: 46rpx; /* 背景的高 */
+}
+
 .direction-bisection {
     flex: 1;
 }
@@ -54,18 +61,85 @@ page {
     align-items: center;
 }
 
+.bottom-line-1 {
+    border-bottom: 1px solid rgb(0, 140, 255);
+    border-radius: 20rpx;
+}
+
+.bottom-line-2 {
+    border-bottom: 1px solid rgb(255, 238, 0);
+    border-radius: 20rpx;
+}
+
 .font-set-1 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Consolas';
     font-weight: bold;
     color: rgb(0, 162, 255);
 }
 
 .font-set-2 {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Consolas';
     font-weight: bold;
     color: rgb(255, 251, 2);
+}
+
+.font-set-3 {
+    font-family: 'Consolas';
+    font-weight: bold;
+    font-size: 30rpx;
+    color: rgb(255, 251, 2);
+}
+
+.font-set-4 {
+    font-family: 'Consolas';
+    font-weight: bold;
+    font-size: 50rpx;
+    color: rgb(45, 94, 35);
+}
+
+.font-set-5 {
+    font-family: 'Consolas';
+    font-weight: bold;
+    font-size: 30rpx;
+    color: rgb(0, 0, 0);
+}
+
+.font-set-6 {
+    font-family: 'Consolas';
+    font-weight: bold;
+    color: 000;
 }
 
 .block-type-1 {
     background: linear-gradient(to right, rgb(0, 162, 255), rgb(230, 230, 113));
 }
+
+.block-type-2 {
+    background: fff;
+}
+
+.list-head-style-1 {
+    background: gray;
+}
+
+@keyframes slideup {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+}
+
+.button-1 {
+    height: 80%;
+    width: 80%;
+    background:rgb(0, 162, 255);
+    border-radius: 40rpx;
+}
+
+.button-1:active {
+    background:rgb(1, 77, 121);
+}
+
+/***********************************************/

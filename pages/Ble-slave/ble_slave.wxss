@@ -1,1 +1,109 @@
-/* pages/Ble-slave/ble_slave.wxss */
+.ble-info-container {
+    height: 10%;
+}
+
+.ble-log-container {
+    height: 60%;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.ble-service-container {
+    height: 30%;
+}
+
+.ble-info-name-container {
+    width: 70%;
+}
+
+.ble-info-conntect-state-container {
+    width: 30%;
+}
+
+.ble-log-textarea {
+    height: 100%;
+    width: 100%;
+    font-family: "Consolas";
+    color: rgb(1, 183, 255);
+    background: black;
+    overflow: scroll;
+}
+
+.ble-com-1 {
+    height: 30%;
+}
+
+.ble-com-1-interval {
+    width: 40%;
+}
+
+.ble-com-1-interval-style {
+    width: 80%;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.ble-com-1-timer {
+    width: 20%;
+}
+
+.ble-com-1-service-select {
+    width: 40%;
+}
+
+.ble-com-1-service-select-style {
+    width: 80%;
+    height: 80%;
+    border-radius: 30rpx;
+    background: rgb(1, 183, 255);
+}
+
+.ble-com-1-service-select-style:active {
+    background-color: rgb(35, 126, 187);
+}
+
+.ble-com-2 {
+    height: 30%;
+}
+
+.ble-characteritisc-uuid {
+    width: 70%;
+}
+
+.ble-characteritisc-read {
+    width: 15%;
+}
+
+.ble-characteritisc-notify {
+    width: 15%;
+}
+
+.ble-com-3 {
+    height: 30%;
+}
+
+.ble-com-2-input {
+    width: 80%;
+}
+
+.ble-com-2-input-style {
+    width: 90%;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.ble-com-2-send {
+    width: 20%;
+}
+
+.ble-com-2-send-style {
+    width: 80%;
+    height: 80%;
+    border-radius: 30rpx;
+    background: rgb(1, 183, 255);
+}
+
+.ble-com-2-send-style:active {
+    background: rgb(0, 94, 131);
+}
+
+.scan-button:active {
+    background-color: rgb(35, 126, 187);
+}

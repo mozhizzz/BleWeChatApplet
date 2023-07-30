@@ -1,13 +1,14 @@
 
 /*****************业务样式*******************/
 .top-bar-style {
-    border-style: solid;
+    /* border-style: solid;
     border-color: rgb(0, 140, 255);
-    border-width: 5rpx;
+    border-width: 5rpx; */
 }
 
 .top-bar-child-style {
     border-bottom: 1px solid rgb(0, 140, 255);
+    border-radius: 20rpx;
 }
 
 .bottom-bar-style {
@@ -20,10 +21,12 @@
 
 .top-bar {
     height: 30%;
+    animation: slideup 1s forwards;
 }
 
 .bottom-bar {
     height: 70%;
+    animation: slideup 3s forwards;
 }
 
 .name-filter-label {
