@@ -14,17 +14,17 @@
         </view>
     </view>
     <view class="ble-log-container">
-        <textarea placeholder="log" class="ble-log-textarea" value="2023-07-30 21:53: log" disabled="{{true}}" maxlength="{{-1}}"/>
+        <textarea placeholder="log" class="ble-log-textarea" value="{{logInfo}}" disabled="{{true}}" maxlength="{{-1}}" scrollTop/>
     </view>
     <view class="ble-service-container">
            <view class="container-direction">
                 <view class="ble-com-1">
                     <view class="container-transverse">
                         <view class="ble-com-1-interval child-centered">
-                            <input auto-focus placeholder="ms" class="ble-com-1-interval-style"/>
+                            <input placeholder="ms" class="ble-com-1-interval-style" value="{{sendInterval}}"/>
                         </view>
                         <view class="ble-com-1-timer child-centered">
-                            <checkbox value="{{checkbBoxValue}}" checked="true"/>定时
+                            <checkbox value="{{checkbBoxValue}}" checked="{{isTimingSend}}"/>定时
                         </view>
                         <view class="ble-com-1-service-select child-centered">
                             <view class="ble-com-1-service-select-style child-centered" bindtap="characteritiscSelect">
@@ -36,14 +36,14 @@
                 <view class="ble-com-2">
                     <view class="container-transverse">
                         <view class="ble-characteritisc-uuid child-centered font-set-1">
-                            <text>FFF0</text>
+                            <text>{{selectCharacteritisc}}</text>
                         </view>
-                        <view class="ble-characteritisc-read child-centered">
+                        <view class="ble-characteritisc-read child-centered" bindtap="onReadButtonClick">
                             <view class="button-1 child-centered">
                                 <text>R</text>
                             </view>
                         </view>
-                        <view class="ble-characteritisc-notify child-centered">
+                        <view class="ble-characteritisc-notify child-centered"  bindtap="onNotifyButtonClick">
                             <view class="button-1 child-centered">
                                 <text>N</text>
                             </view>
@@ -53,10 +53,10 @@
                 <view class="ble-com-3">
                     <view class="container-transverse">
                         <view class="ble-com-2-input child-centered">
-                            <input auto-focus placeholder="info to send" class="ble-com-2-input-style"/>
+                            <input placeholder="info to send" class="ble-com-2-input-style" bindinput="onSendInput"/>
                         </view>
                         <view class="ble-com-2-send child-centered">
-                            <view class="ble-com-2-send-style child-centered">
+                            <view class="ble-com-2-send-style child-centered" bindtap="onSendButtonClick">
                                 <text>发送</text>
                             </view>
                         </view>

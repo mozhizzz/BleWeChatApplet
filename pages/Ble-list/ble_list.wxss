@@ -26,7 +26,7 @@
 
 .bottom-bar {
     height: 70%;
-    animation: slideup 3s forwards;
+    animation: slideup 2s forwards;
 }
 
 .name-filter-label {

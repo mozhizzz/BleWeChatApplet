@@ -74,9 +74,16 @@ Page({
     // 重复判断
     for (let i=0; i<this.data.bleList.length; i++) {
       if (device.localName == this.data.bleList[i].localName) {
+        this.data.bleList[i].RSSI = device.RSSI
+
+        this.setData({
+          bleList: this.data.bleList
+        })
+
         return
       }
     }
+
     this.data.bleList.push(device)
     
     this.setData({
@@ -117,7 +124,11 @@ Page({
    * 自定义回调-选择设备回调
    */
   onDeviceSelect(event) {
-
+    let index = Number(event.currentTarget.id)
+    
+    wx.navigateTo({
+      url: `/pages/Ble-slave/ble_slave?deviceId=${this.data.bleList[index].deviceId}&&deviceName=${this.data.bleList[index].localName}`
+    })
   },
 
 //******************************************************/

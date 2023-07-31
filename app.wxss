@@ -111,6 +111,7 @@ checkbox .wx-checkbox-input{
 }
 
 .block-type-1 {
+    border-radius: 20rpx;
     background: linear-gradient(to right, rgb(0, 162, 255), rgb(230, 230, 113));
 }
 

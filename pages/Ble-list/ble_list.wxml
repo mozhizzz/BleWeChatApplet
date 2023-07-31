@@ -33,8 +33,8 @@
     </view>
     <view class="bottom-bar bottom-bar-style">
         <view class="container-direction">
-            <view class="device-item-container child-centered" wx:for="{{bleList}}">
-                <view class="device-item">
+            <view class="device-item-container child-centered" wx:for="{{bleList}}" data-index="{{index}}">
+                <view class="device-item" bindtap="onDeviceSelect" id="{{index}}">
                     <view class="container-direction block-type-1">
                         <view class="direction-bisection">
                             <view class="container-transverse">
@@ -47,7 +47,9 @@
                             </view>
                         </view>
                         <view class="direction-bisection"></view>
-                        <view class="direction-bisection"></view>
+                        <view class="direction-bisection child-centered font-set-2">
+                          <text>Connect</text>
+                        </view>
                     </view>
                 </view>
             </view>

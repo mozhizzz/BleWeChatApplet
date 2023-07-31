@@ -1,3 +1,5 @@
+import { ab2hex, stringToAscii, stringToHexArray, arrayBufferToHexString } from '../../utils/TypeConversion'
+
 // pages/Ble-slave/ble_slave.js
 Page({
 
@@ -10,7 +12,37 @@ Page({
       deviceName: '',
       deviceService: []
     },
+
+    selectService: '',
+    selectCharacteritisc: '',
+    selectCharacteritiscNotifyState: false,
+
+    isTimingSend: false,
+    sendInterval: 1000,
     negotiation_mtu: 200,
+    logInfo: '',
+    sendMsg: '',
+  },
+
+//***************************************自定义函数 *****/
+  printLog(str) {
+    if (this.data.logInfo.length > 20000) {
+      this.data.logInfo = ''
+    }
+
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+    let day = date.getDate().toString().padStart(2, '0'); 
+    let hour = date.getHours().toString().padStart(2, '0');
+    let minute = date.getMinutes().toString().padStart(2, '0');
+    let formattedDate = `${year}-${month}-${day} ${hour}:${minute}: `;
+
+    let strWithtime = formattedDate + str
+
+    this.setData({
+      logInfo: this.data.logInfo + strWithtime + '\n'
+    })
   },
 
   /**
@@ -65,20 +97,56 @@ Page({
         })
       }
     })
+
+    wx.onBLEConnectionStateChange((result) => {
+      console.log(`device ${result.deviceId} state has changed, connected: ${result.connected}`)
+
+      if (!result.connected) {
+        this.onBleDisconnect()
+      }
+    })
   },
 
   /**
    * 自定义函数--使能notification
    */
-  enableNotification(deviceId) {
-    
+  enableNotification(deviceId, serviceId, characteristiscId) {
+    wx.notifyBLECharacteristicValueChange({
+      deviceId: deviceId,
+      serviceId: serviceId,
+      characteristicId: characteristiscId,
+      state: true,
+      success: (res) => {
+        this.printLog("notify successfully!")
+
+        wx.onBLECharacteristicValueChange((result) => {
+          this.onBleCharacteristicValueChange(result)
+        })
+      },
+      fail: (res) => {
+        this.printLog("notify fail!" + res.errMsg)
+      }
+    })
   },
 
   /**
    * 自定义函数--往特征写入数据
    */
-  writeCharacteristic(deviceId, serviceUUID, characteristicUUID) {
-    
+  writeCharacteristic(deviceId, serviceUUID, characteristicUUID, value) {
+    this.printLog("Send: "+ arrayBufferToHexString(value))
+
+    wx.writeBLECharacteristicValue({
+      characteristicId: deviceId,
+      deviceId: serviceUUID,
+      serviceId: characteristicUUID,
+      value: value,
+      success: (res) => {
+        console.log(res)
+      },
+      fail: (res) => {
+        console.log(res)
+      }
+    })
   },
 
   /**
@@ -98,14 +166,14 @@ Page({
       deviceId: deviceId,
       success: (res) => {
         res.services.forEach((serItem) => {
-          console.log('get service successfully, services UUID: ', serItem.uuid)
+          this.printLog('get service successfully, services UUID: ' + serItem.uuid)
           wx.getBLEDeviceCharacteristics({
             deviceId: deviceId,
             serviceId: serItem.uuid,
             success: (res) => {
               let chars = []
               res.characteristics.forEach((charItem) => {
-                console.log('get characteristics successfully, characteristics UUID: ', charItem.uuid)
+                this.printLog('get characteristics successfully, characteristics UUID: '+ charItem.uuid)
                 chars.push(charItem)
               })
 
@@ -126,28 +194,107 @@ Page({
     })
   },
 
+//******************************************************/
+
+//***************************************自定义事件回调 */
+
   /**
    * 自定义回调--特征选择
    */
   characteritiscSelect(event) {
+    let serviceList = []
+    let that = this
+    let selectChar = ''
+    this.data.deviceInfo.deviceService.forEach((item) => {
+      serviceList.push(item.serviceUUID)
+    })
+    
     wx.showActionSheet({
-        itemList: ['选项1', '选项2', '选项3'],
-        success: function(res) {
+        itemList: serviceList,
+        success: (res) => {
+            let index = res.tapIndex
+            let charList = []
+            
+            this.data.selectService = serviceList[index]
+            this.data.deviceInfo.deviceService[index].characteristics.forEach((item) => {
+              charList.push(item.uuid)
+            })
+
             wx.showActionSheet({
-                itemList: ['选项A', '选项B', '选项C'],
-                success: function(res) {
-                    console.log(res.tapIndex) // 用户点击的选项序号
+                itemList: charList,
+                success: (res) => {
+                    this.setData({
+                      selectCharacteritisc: charList[res.tapIndex]
+                    })
                 },
-                fail: function(res) {
+                fail: (res) => {
                     console.log(res.errMsg)
                 }
             })
         },
-        fail: function(res) {
+        fail: (res) => {
           console.log(res.errMsg)
         }
     })
   },
+
+  /**
+   * 自定义回调--连接断开回调
+   */
+  onBleDisconnect() {
+    wx.navigateBack({
+      delta: 1
+    })
+  },
+
+  /**
+   * 自定义回调--特征值变化回调
+   */
+  onBleCharacteristicValueChange(result) {
+    this.printLog(ab2hex(result.value))
+  },
+
+  /**
+   * 自定义回调--点击Read按钮
+   */
+  onReadButtonClick(event) {
+    wx.readBLECharacteristicValue({
+      deviceId: this.data.deviceInfo.deviceId,
+      serviceId: this.data.selectService,
+      characteristicId: this.data.selectCharacteritisc,
+      success: (res) => {
+        console.log(res)
+      },
+      fail: (res) => {
+        this.printLog(res)
+      }
+    })
+  },
+
+  /**
+   * 自定义回调--点击Notify按钮
+   */
+  onNotifyButtonClick(event) {
+    this.enableNotification(this.data.deviceInfo.deviceId, this.data.selectService, this.data.selectCharacteritisc)
+  },
+
+  /**
+   * 自定义回调--输入框输入事件回调
+   */
+  onSendInput(event) {
+    this.data.sendMsg = event.detail.value
+  },
+
+  /**
+   * 自定义回调--点击发送按钮
+   */
+  onSendButtonClick(event) {
+    let value = stringToHexArray(this.data.sendMsg)
+
+    this.writeCharacteristic(this.data.deviceInfo.deviceId, this.data.selectService, this.data.selectCharacteritisc, value)
+  },
+
+//******************************************************/
 
   /**
    * 生命周期函数--监听页面加载
@@ -184,7 +331,11 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
+    console.log("leave detail page")
 
+    wx.closeBLEConnection({
+      deviceId: this.data.deviceId,
+    })
   },
 
   /**
