@@ -7,7 +7,12 @@
                         <text>MTC33344423DA22</text>
                     </view>
                     <view class="ble-info-conntect-state-container child-centered">
-                        <icon type="success" color="rgb(35, 126, 187)" size="35"/>
+                        <view wx:if="{{connectState}}">
+                          <icon type="success" color="rgb(35, 126, 187)" size="35"/>
+                        </view>
+                        <view wx:else>
+                          <icon type="cancel" size="35"/>
+                        </view>
                     </view>
                 </view>
             </view>

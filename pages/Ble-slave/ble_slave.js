@@ -13,6 +13,8 @@ Page({
       deviceService: []
     },
 
+    connectState: false,
+
     selectService: '',
     selectCharacteritisc: '',
     selectCharacteritiscNotifyState: false,
@@ -53,8 +55,6 @@ Page({
     wx.createBLEConnection({
       deviceId: deviceInfo.deviceId,
       success: (res) => {
-        this.printLog('connect successfully!')
-        
         // 手机操作系统判断，非IOS要进行MTU协商
         try {
           const systemInfo = wx.getSystemInfoSync();
@@ -99,11 +99,7 @@ Page({
     })
 
     wx.onBLEConnectionStateChange((result) => {
-      console.log(`device ${result.deviceId} state has changed, connected: ${result.connected}`)
-
-      if (!result.connected) {
-        this.onBleDisconnect()
-      }
+      this.onBleConnectStateChange(result)
     })
   },
 
@@ -242,9 +238,37 @@ Page({
    * 自定义回调--连接断开回调
    */
   onBleDisconnect() {
+    this.setData({
+      connectState: false
+    })
+
     wx.navigateBack({
       delta: 1
     })
+  },
+
+  /**
+   * 自定义回调--连接建立回调
+   */
+  onBleConnect() {
+    this.setData({
+      connectState: true
+    })
+
+    this.printLog('connect successfully!')
+  },
+
+  /**
+   * 自定义回调--连接状态改变回调
+   */
+  onBleConnectStateChange(result) {
+    console.log(`device ${result.deviceId} state has changed, connected: ${result.connected}`)
+
+    if (!result.connected) {
+      this.onBleDisconnect()
+    } else {
+      this.onBleConnect()
+    }
   },
 
   /**
@@ -333,10 +357,10 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-    console.log("leave detail page")
+    this.data.connectState = false
 
     wx.closeBLEConnection({
-      deviceId: this.data.deviceId,
+      deviceId: this.data.deviceInfo.deviceId,
     })
   },
 
