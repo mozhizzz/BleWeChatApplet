@@ -1,4 +1,4 @@
-import { ab2hex, stringToAscii, stringToHexArray, arrayBufferToHexString } from '../../utils/TypeConversion'
+import { ab2hex, stringToHexArray, arrayBufferToHexString } from '../../utils/TypeConversion'
 
 // pages/Ble-slave/ble_slave.js
 Page({
@@ -53,7 +53,7 @@ Page({
     wx.createBLEConnection({
       deviceId: deviceInfo.deviceId,
       success: (res) => {
-        console.log('success', res)
+        this.printLog('connect successfully!')
         
         // 手机操作系统判断，非IOS要进行MTU协商
         try {
@@ -152,7 +152,7 @@ Page({
   /**
    * 自定义函数--接收notification消息
    */
-  onCharacteristicNotifiedMsg() {
+  receiveNotifiedMsg(buffer) {
     
   },
 
@@ -166,14 +166,14 @@ Page({
       deviceId: deviceId,
       success: (res) => {
         res.services.forEach((serItem) => {
-          this.printLog('get service successfully, services UUID: ' + serItem.uuid)
+          console.log('get service successfully, services UUID: ' + serItem.uuid)
           wx.getBLEDeviceCharacteristics({
             deviceId: deviceId,
             serviceId: serItem.uuid,
             success: (res) => {
               let chars = []
               res.characteristics.forEach((charItem) => {
-                this.printLog('get characteristics successfully, characteristics UUID: '+ charItem.uuid)
+                console.log('get characteristics successfully, characteristics UUID: '+ charItem.uuid)
                 chars.push(charItem)
               })
 
@@ -251,7 +251,9 @@ Page({
    * 自定义回调--特征值变化回调
    */
   onBleCharacteristicValueChange(result) {
-    this.printLog(ab2hex(result.value))
+    this.printLog("Rece: " + ab2hex(result.value))
+
+    this.receiveNotifiedMsg(result.value)
   },
 
   /**
@@ -266,7 +268,7 @@ Page({
         console.log(res)
       },
       fail: (res) => {
-        this.printLog(res)
+        console.log(res)
       }
     })
   },

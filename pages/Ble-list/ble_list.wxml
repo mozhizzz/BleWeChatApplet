@@ -7,7 +7,7 @@
                         <text>Name</text>
                     </view>
                     <view class="name-filter-input child-centered">
-                        <input class="name-input-box" placeholder="{{filterName}}" />
+                        <input class="name-input-box" placeholder="{{filterName}}" bindinput="onFilterNameInput"/>
                     </view>
                 </view>
             </view>
@@ -17,7 +17,7 @@
                         <text>RSSI</text>
                     </view>
                     <view class="rssi-slider child-centered">
-                        <slider class="slider-bar" min="-100" max="50" step="1" value="{{filterRssi}}" bindchanging="rssiSliderChange" />
+                        <slider class="slider-bar" min="-100" max="50" step="1" value="{{filterRssi}}" bindchanging="rssiSliderChange" bindchange="rssiSliderChange"/>
                     </view>
                     <view class="rssi-value child-centered font-set-1">
                         <text>{{filterRssi}}</text>
@@ -25,8 +25,8 @@
                 </view>
             </view>
             <view class="direction-bisection child-centered">
-                <view class="scan-button child-centered" bindtap="onScanStart">
-                    <icon type="search" size="25" color="yellow" />
+                <view class="scan-button child-centered">
+                    <icon type="search" size="25" color="yellow" animation="{{searchAnimation}}" bindtap="onScanStart"/>
                 </view>
             </view>
         </view>

@@ -1,9 +1,6 @@
-
 /*****************业务样式*******************/
 .top-bar-style {
-    /* border-style: solid;
-    border-color: rgb(0, 140, 255);
-    border-width: 5rpx; */
+    border-width: 5rpx;
 }
 
 .top-bar-child-style {

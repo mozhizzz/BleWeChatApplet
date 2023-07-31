@@ -86,6 +86,7 @@
 
 .ble-com-2-input-style {
     width: 90%;
+    height: 70%;
     border: 1px solid rgb(0, 0, 0);
 }
 

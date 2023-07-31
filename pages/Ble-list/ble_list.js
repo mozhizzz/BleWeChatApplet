@@ -8,6 +8,8 @@ Page({
     bleList: [],    // 设备列表
     filterName: 'MTC', // 过滤条件-名称(名称字符串中包含该字符串)
     filterRssi: -100,  // 过滤条件-rssi大于该值的
+
+    searchAnimation: {}
   },
 
 //***************************************自定义函数 *****/
@@ -15,6 +17,13 @@ Page({
    * 自定义函数--开始蓝牙扫描
    */
   startScan() {
+    // 清空蓝牙设备列表
+    if (!this.data.bleList.length == 0) {
+      this.setData({
+        bleList: []
+      })
+    }
+
     wx.openBluetoothAdapter({
       success: (res) => {
         console.log('openBluetoothAdapter success', res)
@@ -67,7 +76,7 @@ Page({
     }
 
     // rssi过滤
-    if (device.rssi < this.data.filterRssi) {
+    if (device.RSSI < this.data.filterRssi) {
       return
     }
     
@@ -101,9 +110,34 @@ Page({
       })
     })
   },
+
+  /**
+   * 自定义函数--播放搜索动画
+   */
+  searchAnimationPlay() {
+    this.data.searchAnimation = wx.createAnimation({
+      duration: 3000,
+      timingFunction: 'linear',
+    });
+
+    this.data.searchAnimation.translateX(-5).step({ duration: 500 }).translateY(-5).step({ duration: 500 }).translateX(10).step({ duration: 500 }).translateY(10).step({ duration: 500 }).translateX(0).step({ duration: 500 }).translateY(0).step({ duration: 500 });
+
+    this.setData({
+      searchAnimation: this.data.searchAnimation.export()
+    });
+  },
+
 //******************************************************/
 
 //***************************************自定义事件回调 */
+
+  /**
+   * 自定义回调--滑动rssi滑动条回调
+   */
+  onFilterNameInput(event) {
+    this.data.filterName = event.detail.value
+  },
+
   /**
    * 自定义回调--滑动rssi滑动条回调
    */
@@ -117,7 +151,9 @@ Page({
    * 自定义回调--点击Scan按钮回调
    */
   onScanStart(event) {
+    this.searchAnimationPlay()
 
+    this.startScan()
   },
 
   /**
@@ -140,6 +176,7 @@ Page({
     // 清空列表
     this.data.bleList = []
 
+    this.searchAnimationPlay()
     // 开始扫描
     this.startScan()
   },
