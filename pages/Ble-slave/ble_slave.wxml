@@ -6,7 +6,7 @@
                     <view class="ble-info-name-container child-centered font-set-1">
                         <text>MTC33344423DA22</text>
                     </view>
-                    <view class="ble-info-conntect-state-container child-centered">
+                    <view class="ble-info-conntect-state-container child-centered" bindtap="onConnectStateClick">
                         <view wx:if="{{connectState}}">
                           <icon type="success" color="rgb(35, 126, 187)" size="35"/>
                         </view>

@@ -28,6 +28,9 @@ Page({
   },
 
 //***************************************自定义函数 *****/
+  /**
+   * 自定义函数--发起蓝牙连接
+   */
   printLog(str) {
     if (this.data.logInfo.length > 50000) {
       this.data.logInfo = ''
@@ -47,6 +50,18 @@ Page({
     this.setData({
       logInfo: strWithtime + '\n' + this.data.logInfo
     })
+  },
+
+  /**
+   * 自定义函数--发起蓝牙连接
+   */
+  checkConnectionState() {
+    if (this.data.connectState) {
+      return true
+    } else {
+      this.printLog("No Connection Exist!")
+      return false
+    }
   },
 
   /**
@@ -99,9 +114,14 @@ Page({
         })
       }
     })
+  },
 
-    wx.onBLEConnectionStateChange((result) => {
-      this.onBleConnectStateChange(result)
+  /**
+   * 自定义函数--主动断开蓝牙连接
+   */
+  disconnectBleConnection(deviceInfo) {
+    wx.closeBLEConnection({
+      deviceId: deviceInfo.deviceId,
     })
   },
 
@@ -160,6 +180,8 @@ Page({
    */
   getAllServiceAndCharacteristic(deviceId) {
     console.log('start find service and characteristic')
+    // 清空一下服务列表，否则会一直叠加
+    this.data.deviceInfo.deviceService = []
 
     wx.getBLEDeviceServices({
       deviceId: deviceId,
@@ -198,9 +220,59 @@ Page({
 //***************************************自定义事件回调 */
 
   /**
-   * 自定义回调--特征选择
+   * 自定义回调--连接断开回调
+   */
+  onBleDisconnect() {
+    this.printLog("Disconnect successfully!")
+    console.log(('Disconnect successfully!'))
+
+    this.setData({
+      connectState: false
+    })
+  },
+
+  /**
+   * 自定义回调--连接建立回调
+   */
+  onBleConnect() {
+    this.printLog('Connect Successfully!')
+    console.log(('Connect Successfully!'))
+
+    this.setData({
+      connectState: true
+    })
+  },
+
+  /**
+   * 自定义回调--连接状态改变回调
+   */
+  onBleConnectStateChange(result) {
+    console.log(`device ${result.deviceId} state has changed, connected: ${result.connected}`)
+
+    if (!result.connected) {
+      this.onBleDisconnect()
+    } else {
+      this.onBleConnect()
+    }
+  },
+
+  /**
+   * 自定义回调--特征值变化回调
+   */
+  onBleCharacteristicValueChange(result) {
+    this.printLog("Rece<-" + ab2hex(result.value))
+
+    this.receiveNotifiedMsg(result.value)
+  },
+
+  /**
+   * 自定义回调--特征选择点击回调
    */
   characteritiscSelect(event) {
+    if (!this.checkConnectionState()) {
+      return
+    }
+
     let serviceList = []
     let that = this
     let selectChar = ''
@@ -238,55 +310,24 @@ Page({
   },
 
   /**
-   * 自定义回调--连接断开回调
+   * 自定义回调--连接状态点击回调
    */
-  onBleDisconnect() {
-    this.setData({
-      connectState: false
-    })
-
-    wx.navigateBack({
-      delta: 1
-    })
-  },
-
-  /**
-   * 自定义回调--连接建立回调
-   */
-  onBleConnect() {
-    this.setData({
-      connectState: true
-    })
-
-    this.printLog('connect successfully!')
-  },
-
-  /**
-   * 自定义回调--连接状态改变回调
-   */
-  onBleConnectStateChange(result) {
-    console.log(`device ${result.deviceId} state has changed, connected: ${result.connected}`)
-
-    if (!result.connected) {
-      this.onBleDisconnect()
+  onConnectStateClick(result) {
+    if (this.data.connectState) {
+      this.disconnectBleConnection(this.data.deviceInfo)
     } else {
-      this.onBleConnect()
+      this.initBleConnect(this.data.deviceInfo)
     }
-  },
-
-  /**
-   * 自定义回调--特征值变化回调
-   */
-  onBleCharacteristicValueChange(result) {
-    this.printLog("Rece<-" + ab2hex(result.value))
-
-    this.receiveNotifiedMsg(result.value)
   },
 
   /**
    * 自定义回调--点击Read按钮
    */
   onReadButtonClick(event) {
+    if (!this.checkConnectionState()) {
+      return
+    }
+    
     wx.readBLECharacteristicValue({
       deviceId: this.data.deviceInfo.deviceId,
       serviceId: this.data.selectService,
@@ -317,8 +358,13 @@ Page({
    * 自定义回调--点击Notify按钮
    */
   onNotifyButtonClick(event) {
+    if (!this.checkConnectionState()) {
+      return
+    }
+
     this.enableNotification(this.data.deviceInfo.deviceId, this.data.selectService, this.data.selectCharacteritisc)
   },
+
   /**
    * 自定义回调--间隔输入框事件回调
    */
@@ -337,6 +383,10 @@ Page({
    * 自定义回调--点击发送按钮
    */
   onSendButtonClick(event) {
+    if (!this.checkConnectionState()) {
+      return
+    }
+    
     let value = stringToHexArray(this.data.sendMsg)
 
     if (this.data.isTimingSend) {
@@ -365,6 +415,10 @@ Page({
     this.data.deviceInfo.deviceName = options.deviceName
 
     this.initBleConnect(this.data.deviceInfo)
+
+    wx.onBLEConnectionStateChange((result) => {
+      this.onBleConnectStateChange(result)
+    })
   },
 
   /**
