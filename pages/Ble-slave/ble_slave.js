@@ -130,12 +130,13 @@ Page({
    * 自定义函数--往特征写入数据
    */
   writeCharacteristic(deviceId, serviceUUID, characteristicUUID, value) {
+    console.log(deviceId, serviceUUID, characteristicUUID)
     this.printLog("Send: "+ arrayBufferToHexString(value))
 
     wx.writeBLECharacteristicValue({
-      characteristicId: deviceId,
-      deviceId: serviceUUID,
-      serviceId: characteristicUUID,
+      deviceId:deviceId,
+      serviceId: serviceUUID,
+      characteristicId: characteristicUUID,
       value: value,
       success: (res) => {
         console.log(res)
