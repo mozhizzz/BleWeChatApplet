@@ -40,23 +40,19 @@ Page({
 
             this.onDeviceFound()
           },
+          fail: (res) => {
+            wx.showModal({
+              title: "BLE Scan Fail",
+              content: res.errMsg,
+            })
+          }
         })
       },
       fail: (res) => {
-        console.log('error', res.errCode)
-        
-        if (res.errCode === 10001) {
-          wx.onBluetoothAdapterStateChange(function (res) {
-            console.log('onBluetoothAdapterStateChange', res)
-            if (res.available) {
-              this._bleisScan = true
-              const data = {}
-              data[`bleScanState`] = this.data.lang.s2
-              this.setData(data)
-              this.startBluetoothDevicesDiscovery()
-            }
-          })
-        }
+        wx.showModal({
+          title: "BLE Open Adapter Fail",
+          content: res.errMsg,
+        })
       }
     })
   },

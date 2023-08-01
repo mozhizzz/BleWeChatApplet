@@ -224,11 +224,14 @@ Page({
    */
   onBleDisconnect() {
     this.printLog("Disconnect successfully!")
-    console.log(('Disconnect successfully!'))
 
     this.setData({
       connectState: false
     })
+
+    if (this.data.sendTimer) {
+      clearInterval(this.data.sendTimer)
+    }
   },
 
   /**
@@ -236,7 +239,6 @@ Page({
    */
   onBleConnect() {
     this.printLog('Connect Successfully!')
-    console.log(('Connect Successfully!'))
 
     this.setData({
       connectState: true
@@ -247,6 +249,7 @@ Page({
    * 自定义回调--连接状态改变回调
    */
   onBleConnectStateChange(result) {
+    console.log(result)
     console.log(`device ${result.deviceId} state has changed, connected: ${result.connected}`)
 
     if (!result.connected) {
