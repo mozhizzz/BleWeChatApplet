@@ -5,7 +5,7 @@ export function ab2hex(buffer) {
       return ('00' + bit.toString(16)).slice(-2)
     }
   )
-  return hexArr.join('');
+  return hexArr.join(' ');
 }
 
 export function stringToAscii(str) {

@@ -29,7 +29,7 @@ Page({
 
 //***************************************自定义函数 *****/
   printLog(str) {
-    if (this.data.logInfo.length > 20000) {
+    if (this.data.logInfo.length > 50000) {
       this.data.logInfo = ''
     }
 
@@ -39,12 +39,13 @@ Page({
     let day = date.getDate().toString().padStart(2, '0'); 
     let hour = date.getHours().toString().padStart(2, '0');
     let minute = date.getMinutes().toString().padStart(2, '0');
-    let formattedDate = `${year}-${month}-${day} ${hour}:${minute}: `;
+    let seconds = date.getSeconds().toString().padStart(2, '0');
+    let formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${seconds}: `;
 
     let strWithtime = formattedDate + str
 
     this.setData({
-      logInfo: this.data.logInfo + strWithtime + '\n'
+      logInfo: strWithtime + '\n' + this.data.logInfo
     })
   },
 
@@ -131,7 +132,7 @@ Page({
    */
   writeCharacteristic(deviceId, serviceUUID, characteristicUUID, value) {
     console.log(deviceId, serviceUUID, characteristicUUID)
-    this.printLog("Send: "+ arrayBufferToHexString(value))
+    this.printLog("Send->"+ arrayBufferToHexString(value))
 
     wx.writeBLECharacteristicValue({
       deviceId:deviceId,
@@ -277,7 +278,7 @@ Page({
    * 自定义回调--特征值变化回调
    */
   onBleCharacteristicValueChange(result) {
-    this.printLog("Rece: " + ab2hex(result.value))
+    this.printLog("Rece<-" + ab2hex(result.value))
 
     this.receiveNotifiedMsg(result.value)
   },
@@ -317,6 +318,12 @@ Page({
    */
   onNotifyButtonClick(event) {
     this.enableNotification(this.data.deviceInfo.deviceId, this.data.selectService, this.data.selectCharacteritisc)
+  },
+  /**
+   * 自定义回调--间隔输入框事件回调
+   */
+  onIntervalInput(event) {
+    this.data.sendInterval = event.detail.value
   },
 
   /**
