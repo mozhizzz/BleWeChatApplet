@@ -29,7 +29,7 @@
                             <input placeholder="ms" class="ble-com-1-interval-style" value="{{sendInterval}}"/>
                         </view>
                         <view class="ble-com-1-timer child-centered">
-                            <checkbox value="{{checkbBoxValue}}" checked="{{isTimingSend}}"/>定时
+                            <checkbox checked="{{isTimingSend}}" bindtap="onTimerCheckboxChange"/>定时
                         </view>
                         <view class="ble-com-1-service-select child-centered">
                             <view class="ble-com-1-service-select-style child-centered" bindtap="characteritiscSelect">

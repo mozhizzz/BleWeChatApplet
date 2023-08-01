@@ -24,6 +24,7 @@ Page({
     negotiation_mtu: 200,
     logInfo: '',
     sendMsg: '',
+    sendTimer: null,
   },
 
 //***************************************自定义函数 *****/
@@ -298,6 +299,19 @@ Page({
   },
 
   /**
+   * 自定义回调--定时选项点击事件
+   */
+  onTimerCheckboxChange(event) {
+    if (this.data.isTimingSend) {
+      clearInterval(this.data.sendTimer)
+    }
+
+    this.setData({
+      isTimingSend: !this.data.isTimingSend
+    })
+  },
+
+  /**
    * 自定义回调--点击Notify按钮
    */
   onNotifyButtonClick(event) {
@@ -317,7 +331,20 @@ Page({
   onSendButtonClick(event) {
     let value = stringToHexArray(this.data.sendMsg)
 
-    this.writeCharacteristic(this.data.deviceInfo.deviceId, this.data.selectService, this.data.selectCharacteritisc, value)
+    if (this.data.isTimingSend) {
+      if (!this.data.sendTimer) {
+        this.data.sendTimer = setInterval(() => {
+          this.writeCharacteristic(this.data.deviceInfo.deviceId, this.data.selectService, this.data.selectCharacteritisc, value)
+        }, this.data.sendInterval)
+      } else {
+        clearInterval(this.data.sendTimer)
+        this.data.sendTimer = setInterval(() => {
+          this.writeCharacteristic(this.data.deviceInfo.deviceId, this.data.selectService, this.data.selectCharacteritisc, value)
+        }, this.data.sendInterval)
+      }
+    } else {
+      this.writeCharacteristic(this.data.deviceInfo.deviceId, this.data.selectService, this.data.selectCharacteritisc, value)
+    }
   },
 
 //******************************************************/
