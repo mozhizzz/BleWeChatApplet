@@ -110,6 +110,12 @@ checkbox .wx-checkbox-input{
     color: 000;
 }
 
+.font-set-7 {
+  font-family: 'Consolas';
+  font-weight: bold;
+  color: red;
+}
+
 .block-type-1 {
     border-radius: 20rpx;
     background: linear-gradient(to right, rgb(0, 162, 255), rgb(230, 230, 113));

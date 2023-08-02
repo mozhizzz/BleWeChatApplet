@@ -25,6 +25,8 @@ Page({
     logInfo: '',
     sendMsg: '',
     sendTimer: null,
+    sendCount: 0,
+    receiveCount: 0,
   },
 
 //***************************************自定义函数 *****/
@@ -151,7 +153,14 @@ Page({
    * 自定义函数--往特征写入数据
    */
   writeCharacteristic(deviceId, serviceUUID, characteristicUUID, value) {
-    console.log(deviceId, serviceUUID, characteristicUUID)
+    if (!this.checkConnectionState()) {
+      return
+    }
+
+    this.setData({
+      sendCount: this.data.sendCount+1
+    })
+
     this.printLog("Send->"+ arrayBufferToHexString(value))
 
     wx.writeBLECharacteristicValue({
@@ -160,7 +169,7 @@ Page({
       characteristicId: characteristicUUID,
       value: value,
       success: (res) => {
-        console.log(res)
+        
       },
       fail: (res) => {
         console.log(res)
@@ -226,6 +235,11 @@ Page({
     this.printLog("Disconnect successfully!")
 
     this.setData({
+      sendCount: 0,
+      receiveCount: 0
+    })
+
+    this.setData({
       connectState: false
     })
 
@@ -249,7 +263,6 @@ Page({
    * 自定义回调--连接状态改变回调
    */
   onBleConnectStateChange(result) {
-    console.log(result)
     console.log(`device ${result.deviceId} state has changed, connected: ${result.connected}`)
 
     if (!result.connected) {
@@ -263,6 +276,10 @@ Page({
    * 自定义回调--特征值变化回调
    */
   onBleCharacteristicValueChange(result) {
+    this.setData({
+      receiveCount: this.data.receiveCount+1
+    })
+
     this.printLog("Rece<-" + ab2hex(result.value))
 
     this.receiveNotifiedMsg(result.value)

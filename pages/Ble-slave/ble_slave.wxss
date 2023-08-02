@@ -12,11 +12,23 @@
 }
 
 .ble-info-name-container {
-    width: 70%;
+    width: 50%;
+}
+
+.ble-comm-record-container {
+  width: 30%;
 }
 
 .ble-info-conntect-state-container {
-    width: 30%;
+    width: 20%;
+}
+
+.ble-comm-receive-count-container {
+  flex: 1;
+}
+
+.ble-comm-send-count-container {
+  flex: 1;
 }
 
 .ble-log-textarea {
