@@ -10,10 +10,5 @@
     "navigationBarTextStyle": "black"
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json",
-  "permissions": {
-    "scope.userLocation": {
-        "desc": "小程序请求你的位置信息"
-    }
-  }
+  "sitemapLocation": "sitemap.json"
 }
