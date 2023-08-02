@@ -58,7 +58,7 @@
                 <view class="ble-com-3">
                     <view class="container-transverse">
                         <view class="ble-com-2-input child-centered">
-                            <input placeholder="info to send" class="ble-com-2-input-style" bindinput="onSendInput"/>
+                            <input placeholder="info to send" class="ble-com-2-input-style" bindinput="onSendInput" maxlength="{{-1}}" />
                         </view>
                         <view class="ble-com-2-send child-centered">
                             <view class="ble-com-2-send-style child-centered" bindtap="onSendButtonClick">
