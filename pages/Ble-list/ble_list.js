@@ -33,8 +33,6 @@ Page({
         wx.startBluetoothDevicesDiscovery({
           allowDuplicatesKey: true,
           success: (res) => {
-            console.log('startBluetoothDevicesDiscovery success', res)
-
             // 5秒后停止扫描
             setTimeout(() => {
               wx.stopBluetoothDevicesDiscovery() 
@@ -57,6 +55,55 @@ Page({
         })
       }
     })
+  },
+
+  /**
+   * 自定义函数--解析广播数据
+   */
+  parseAdvData(buffer) {
+    let dataView = new DataView(buffer);
+    let advertisedData = {};
+    // 遍历广播数据
+    try {
+      for (let i = 0; i < dataView.byteLength; ) {
+        console.log(i)
+          let length = dataView.getUint8(i++);
+          let type = dataView.getUint8(i++);
+  
+          // 读取数据
+          let data = [];
+          for (let j = 0; j < length - 1; j++) {
+              data.push(dataView.getUint8(i++));
+          }
+  
+          switch (type) {
+              case 0x01: // Flags
+                  advertisedData['flags'] = data;
+                  break;
+              case 0x02: // Incomplete List of 16-bit Service Class UUIDs
+              case 0x03: // Complete List of 16-bit Service Class UUIDs
+                  advertisedData['uuids16bit'] = data;
+                  break;
+              case 0x06: // Incomplete List of 128-bit Service Class UUIDs
+              case 0x07: // Complete List of 128-bit Service Class UUIDs
+                  advertisedData['uuids128bit'] = data;
+                  break;
+              case 0x09: // Complete Local Name
+                  advertisedData['localName'] = String.fromCharCode.apply(null, data);
+                  break;
+              case 0xFF: // Manufacturer Specific Data
+                  advertisedData['manufacturerData'] = data;
+                  break;
+              default:
+                  advertisedData[`type_${type}`] = data;
+                  break;
+          }
+      }
+    } catch(e) {
+      console.log(e)
+    }
+    
+    return advertisedData;
   },
 
   /**
@@ -106,7 +153,10 @@ Page({
       device.showAdvertiseData = combinedHexString
     } else if (device.advertisData){
       // TODO: 解析广播厂商数据
-      device.showAdvertiseData = ''
+      let advObj = this.parseAdvData(device.advertisData)
+      if (advObj.manufacturerData) {
+        device.showAdvertiseData = arrayBufferToHexString(advObj.manufacturerData)
+      }
     } else {
       device.showAdvertiseData = ''
     }

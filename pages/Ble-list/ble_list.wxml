@@ -38,15 +38,15 @@
                     <view class="container-direction block-type-1">
                         <view class="direction-bisection">
                             <view class="container-transverse">
-                                <view class="device-item-name child-centered">
+                                <view class="device-item-name child-centered font-set-6">
                                     <text>{{item.localName}}</text>
                                 </view>
-                                <view class="device-item-rssi child-centered">
+                                <view class="device-item-rssi child-centered font-set-6">
                                     <text>{{item.RSSI}}</text>
                                 </view>
                             </view>
                         </view>
-                        <view class="direction-bisection child-centered">
+                        <view class="direction-bisection child-centered font-set-6">
                           <text class="font-set-6">{{item.showAdvertiseData}}</text>
                         </view>
                         <view class="direction-bisection child-centered font-set-2">
