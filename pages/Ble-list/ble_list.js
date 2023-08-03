@@ -1,4 +1,6 @@
 // pages/Ble-list/bleList.js
+import { ab2hex, stringToHexArray, arrayBufferToHexString } from '../../utils/TypeConversion'
+
 Page({
 
   /**
@@ -89,6 +91,25 @@ Page({
       }
     }
 
+    if (device.serviceData) {
+      let key = Object.keys(device.serviceData)[0];
+      let data = new Uint8Array(device.serviceData[key]);
+
+      // 获取UUID中的0402
+      let hexPartFromUuid = key.substr(4, 4).match(/.{1,2}/g).join(' ') + ' ';
+
+      // 将ArrayBuffer中的数据转化为十六进制字符串
+      let hexPartFromArrayBuffer = Array.from(data, byte => ('00' + byte.toString(16)).slice(-2)).join(' ');
+
+      // 将两个十六进制字符串组合起来
+      let combinedHexString = hexPartFromUuid + hexPartFromArrayBuffer;
+      device.showAdvertiseData = combinedHexString
+    } else if (device.advertisData){
+      // TODO: 解析广播厂商数据
+      device.showAdvertiseData = ''
+    } else {
+      device.showAdvertiseData = ''
+    }
     this.data.bleList.push(device)
     
     this.setData({

@@ -46,7 +46,9 @@
                                 </view>
                             </view>
                         </view>
-                        <view class="direction-bisection"></view>
+                        <view class="direction-bisection child-centered">
+                          <text class="font-set-6">{{item.showAdvertiseData}}</text>
+                        </view>
                         <view class="direction-bisection child-centered font-set-2">
                           <text>Connect</text>
                         </view>
