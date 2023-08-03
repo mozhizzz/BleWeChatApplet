@@ -138,6 +138,8 @@ Page({
       }
     }
 
+    console.log(device)
+
     if (device.serviceData) {
       let key = Object.keys(device.serviceData)[0];
       let data = new Uint8Array(device.serviceData[key]);
@@ -152,11 +154,7 @@ Page({
       let combinedHexString = hexPartFromUuid + hexPartFromArrayBuffer;
       device.showAdvertiseData = combinedHexString
     } else if (device.advertisData){
-      // TODO: 解析广播厂商数据
-      let advObj = this.parseAdvData(device.advertisData)
-      if (advObj.manufacturerData) {
-        device.showAdvertiseData = arrayBufferToHexString(advObj.manufacturerData)
-      }
+      device.showAdvertiseData = arrayBufferToHexString(device.advertisData.slice(0, 5))
     } else {
       device.showAdvertiseData = ''
     }
