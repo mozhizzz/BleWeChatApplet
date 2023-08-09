@@ -97,6 +97,10 @@ Page({
           console.error('获取系统信息失败:', err);
         }
 
+        wx.onBLEMTUChange(function (res) {
+          console.log('bluetooth mtu is', res.mtu)
+        })
+
         console.log('Connect successfully, deviceId: ', deviceInfo.deviceId)
 
         this.getAllServiceAndCharacteristic(deviceInfo.deviceId)

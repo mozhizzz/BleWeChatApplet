@@ -142,17 +142,27 @@ Page({
 
     if (device.serviceData) {
       let key = Object.keys(device.serviceData)[0];
-      let data = new Uint8Array(device.serviceData[key]);
+      if (key) {
+        let data = new Uint8Array(device.serviceData[key]);
 
-      // 获取UUID中的0402
-      let hexPartFromUuid = key.substr(4, 4).match(/.{1,2}/g).join(' ') + ' ';
+        // 获取UUID中的0402
+        let hexPartFromUuid = key.substr(4, 4).match(/.{1,2}/g).join(' ') + ' ';
+  
+        // 将ArrayBuffer中的数据转化为十六进制字符串
+        let hexPartFromArrayBuffer = Array.from(data, byte => ('00' + byte.toString(16)).slice(-2)).join(' ');
+  
+        // 将两个十六进制字符串组合起来
+        let combinedHexString = hexPartFromUuid + hexPartFromArrayBuffer;
+        device.showAdvertiseData = combinedHexString
+      } else {
+        let data = new Uint8Array(device.advertisData);
 
-      // 将ArrayBuffer中的数据转化为十六进制字符串
-      let hexPartFromArrayBuffer = Array.from(data, byte => ('00' + byte.toString(16)).slice(-2)).join(' ');
+        // 将ArrayBuffer中的数据转化为十六进制字符串
+        let hexPartFromArrayBuffer = arrayBufferToHexString(device.advertisData.slice(0, 5))
 
-      // 将两个十六进制字符串组合起来
-      let combinedHexString = hexPartFromUuid + hexPartFromArrayBuffer;
-      device.showAdvertiseData = combinedHexString
+        device.showAdvertiseData = hexPartFromArrayBuffer
+      }
+      
     } else if (device.advertisData){
       device.showAdvertiseData = arrayBufferToHexString(device.advertisData.slice(0, 5))
     } else {
