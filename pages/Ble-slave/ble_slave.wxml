@@ -4,7 +4,7 @@
             <view style="background-color: #F1F1F1; flex: 1;">
                 <view class="container-transverse">
                     <view class="ble-info-name-container child-centered font-set-1">
-                        <text>MTC33344423DA22</text>
+                        <text>{{deviceInfo.deviceName}}</text>
                     </view>
                     <view class="ble-comm-record-container">
                     
